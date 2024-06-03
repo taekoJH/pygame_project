@@ -35,6 +35,8 @@ ground3 = Ground(120, 20, 100, 150, "Images/Ground.png")
 ground4 = Ground(80, 20, 500, 100, "Images/Ground.png")
 
 EnemyGroup = pygame.sprite.Group()
+EnemyGroup.add(E1)
+
 GroundGroup = pygame.sprite.Group()
 GroundGroup.add(ground)
 GroundGroup.add(ground2)
@@ -48,6 +50,10 @@ while True:
             pygame.quit()
             sys.exit()
 
+        if event.type == player.hit_cooldown_event:
+            player.hit_cooldown = False
+            pygame.time.set_timer(player.hit_cooldown_event, 0)
+
         if event.type == MOUSEBUTTONDOWN:
             pass
 
@@ -59,17 +65,21 @@ while True:
                 player.attack()
 
 
-    E1.move()
-    E1.collision(GroundGroup)
-    E1.player_collision(player)
+    # Update Functions
+    for enemy in EnemyGroup:
+        enemy.update(GroundGroup, player)
+        
     player.update(GroundGroup)
     UI.update(CLOCK.get_fps())
 
 
+    # Render Functions
     display.blit(background, (0, 0))
     player.render(display)
-    E1.render(display)
     UI.render(display)
+
+    for enemy in EnemyGroup:
+        enemy.render(display)
 
     for grounds in GroundGroup:
         grounds.render(display)

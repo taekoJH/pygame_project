@@ -1,5 +1,6 @@
 import pygame
 from pygame.locals import *
+from HealthBar import HealthBar
 
 vec = pygame.math.Vector2
 
@@ -13,6 +14,7 @@ class Player(pygame.sprite.Sprite):
         self.pos = vec(x, y)
         self.acc = vec(0, 0)
         self.vel = vec(0, 0)
+        self.healthbar = HealthBar(10, 10)
 
         self.ACC = 0.4
         self.FRIC = -0.1
@@ -28,6 +30,9 @@ class Player(pygame.sprite.Sprite):
         self.attack_frame = 0
         self.attack_counter = 0
         self.attack_range = pygame.Rect(0, 0, 0, 0)
+        self.hit_cooldown = False
+
+        self.hit_cooldown_event = pygame.USEREVENT + 1
 
 
     def move(self):
@@ -51,8 +56,8 @@ class Player(pygame.sprite.Sprite):
         self.pos += self.vel + 0.5 * self.acc
 
         if self.pos.x > 800:
-            self.pos.x = 0
-        elif self.pos.x < -30:
+            self.pos.x = -40
+        elif self.pos.x < -40:
             self.pos.x = 800
         
         self.rect.topleft = self.pos
@@ -65,19 +70,19 @@ class Player(pygame.sprite.Sprite):
 
         if self.jumping == False and self.running == True:
             if self.vel.x >= 0:
-                self.image = animation_right[self.move_frame]
+                self.image = self.animation_right[self.move_frame]
                 self.direction = "RIGHT"
             elif self.vel.x < 0:
-                self.image = animation_left[self.move_frame]
+                self.image = self.animation_left[self.move_frame]
                 self.direction = "LEFT"
             self.move_frame += 1
 
         if self.running == False and self.move_frame != 0:
             self.move_frame = 0
             if self.direction == "RIGHT":
-                self.image = animation_right[self.move_frame]
+                self.image = self.animation_right[self.move_frame]
             elif self.direction == "LEFT":
-                self.image = animation_left[self.move_frame]
+                self.image = self.animation_left[self.move_frame]
 
     def attack(self):
         if self.attacking == True:
@@ -93,9 +98,9 @@ class Player(pygame.sprite.Sprite):
                 return
 
             if self.direction == "RIGHT":
-                self.image = attack_animation_right[self.attack_frame]
+                self.image = self.attack_animation_right[self.attack_frame]
             elif self.direction == "LEFT":
-                self.image = attack_animation_left[self.attack_frame]
+                self.image = self.attack_animation_left[self.attack_frame]
 
             self.attack_counter += 1
             if self.attack_counter >= 2:
@@ -103,10 +108,16 @@ class Player(pygame.sprite.Sprite):
                 self.attack_counter = 0
 
     def update(self, group):
-        self.attack()
         self.walking()
         self.move()
+        self.attack()
         self.collision(group)
+
+    def player_hit(self, damage):
+        if self.hit_cooldown == False:
+            self.hit_cooldown = True
+            self.healthbar.takeDamage(damage)
+            pygame.time.set_timer(self.hit_cooldown_event, 1000)
 
 
     def collision(self, group):
@@ -130,9 +141,10 @@ class Player(pygame.sprite.Sprite):
 
 
     def render(self, display):
-        pygame.draw.rect(display, (255, 0, 0), self.rect)
-        pygame.draw.rect(display, (0, 255, 0), self.attack_range)
+        #pygame.draw.rect(display, (255, 0, 0), self.rect)
+        #pygame.draw.rect(display, (0, 255, 0), self.attack_range)
         display.blit(self.image, self.pos)
+        self.healthbar.render(display)
 
     def load_animations(self):
         self.animation_right = [pygame.image.load("Images/Player_Sprite_R.png").convert_alpha(),

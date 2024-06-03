@@ -54,9 +54,16 @@ class Enemy(pygame.sprite.Sprite):
 
     def player_collision(self, player):
         if self.rect.colliderect(player.rect):
-            pass
+            # Hit the Player 
+            player.player_hit(1)
         elif self.rect.colliderect(player.attack_range):
-            pass
+            # Hit by the Player
+            self.kill()
+
+    def update(self, group, player):
+        self.move()
+        self.collision(group)
+        self.player_collision(player)
                     
 
     def render(self, display):
