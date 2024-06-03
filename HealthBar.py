@@ -31,7 +31,7 @@ class HealthBar(pygame.sprite.Sprite):
     def load_animations(self):
         
         self.health_animations = [pygame.image.load("Images/heart0.png").convert_alpha(),
-                             pygame.image.load("Images/heart.png").convert_alpha(),
+                             pygame.image.load("Images/heart1.png").convert_alpha(),
                              pygame.image.load("Images/heart2.png").convert_alpha(),
                              pygame.image.load("Images/heart3.png").convert_alpha(),
                              pygame.image.load("Images/heart4.png").convert_alpha(),

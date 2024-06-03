@@ -79,4 +79,4 @@ class Enemy(pygame.sprite.Sprite):
 
     def render(self, display):
         display.blit(self.image, self.pos)
-        pygame.draw.rect(display, (0, 0, 255), self.rect)
+        #pygame.draw.rect(display, (0, 0, 255), self.rect)

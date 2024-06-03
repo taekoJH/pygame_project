@@ -67,6 +67,8 @@ while True:
                 levelManager.changeLevel(2)
             if event.key == K_4:
                 levelManager.changeLevel(3)
+            if event.key == K_h:
+                UI.toggleInventory()
 
         if event.type == KEYUP:
             if event.key == K_SPACE:

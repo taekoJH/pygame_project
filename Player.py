@@ -169,7 +169,7 @@ class Player(pygame.sprite.Sprite):
                           pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
 
         self.attack_animation_right = [pygame.image.load("Images/Player_Sprite_R.png").convert_alpha(),
-                                  pygame.image.load("Images/Player_Attack_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack1_R.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack2_R.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack3_R.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack4_R.png").convert_alpha(),
@@ -177,7 +177,7 @@ class Player(pygame.sprite.Sprite):
                                   pygame.image.load("Images/Player_Sprite_R.png").convert_alpha()]
 
         self.attack_animation_left = [pygame.image.load("Images/Player_Sprite_L.png").convert_alpha(),
-                                  pygame.image.load("Images/Player_Attack_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack1_L.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack2_L.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack3_L.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack4_L.png").convert_alpha(),

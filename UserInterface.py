@@ -1,5 +1,5 @@
 import pygame
-
+from Inventory import Inventory
 
 class UserInterface:
     def __init__(self):
@@ -13,6 +13,9 @@ class UserInterface:
         self.regularfont = pygame.font.SysFont("Verdana", 20)
         self.largefont = pygame.font.SysFont("Verdana", 40)
 
+        self.inventory = Inventory()
+        self.inventoryRender = True
+
         self.text = self.regularfont.render("0", True, self.color_black)
 
     def update(self, fps):
@@ -21,3 +24,13 @@ class UserInterface:
         
     def render(self, display):
         display.blit(self.text, (700, 20))
+
+        if self.inventoryRender == True:
+            self.inventory.render(display)
+
+
+    def toggleInventory(self):
+        if self.inventoryRender == True:
+            self.inventoryRender = False
+        elif self.inventoryRender == False:
+            self.inventoryRender = True
