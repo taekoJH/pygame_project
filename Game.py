@@ -1,11 +1,13 @@
 import pygame
 from pygame.locals import *
 import sys
+import random
 
 
 from Ground import Ground
 from Player import Player
 from Enemy import Enemy
+from RangedEnemy import RangedEnemy
 from UserInterface import UserInterface
 from LevelManager import LevelManager
 
@@ -27,10 +29,13 @@ background = pygame.image.load("Images/Background.png")
 
 player = Player(200, 200)
 player.load_animations()
-UI = UserInterface()
+UI = UserInterface(player)
 
 Items = pygame.sprite.Group()
-Projectiles = pygame.sprite.Group()
+PlayerProjectiles = pygame.sprite.Group()
+EnemyProjectiles = pygame.sprite.Group()
+playerGroup = pygame.sprite.Group()
+playerGroup.add(player)
 
 levelManager = LevelManager()
 
@@ -47,7 +52,14 @@ while True:
             pygame.time.set_timer(player.hit_cooldown_event, 0)
 
         if event.type == levelManager.enemy_generation:
-            enemy = Enemy()
+            choice = random.randint(0, 1)
+            enemy = None
+
+            if choice == 0:
+                enemy = Enemy()
+            elif choice == 1:
+                enemy = RangedEnemy(EnemyProjectiles)
+                
             levelManager.enemyGroup.add(enemy)
             levelManager.generatedEnemies += 1
 
@@ -60,8 +72,6 @@ while True:
             if event.key == K_RETURN:
                 player.attacking = True
                 player.attack()
-            if event.key == K_h:
-                UI.toggleInventory()
             if event.key == K_1:
                 levelManager.changeLevel(0)
             if event.key == K_2:
@@ -70,12 +80,10 @@ while True:
                 levelManager.changeLevel(2)
             if event.key == K_4:
                 levelManager.changeLevel(3)
+            if event.key == K_h:
+                UI.toggleInventory()
             if event.key == K_m:
-                if player.mana >= 10:
-                    player.fireball(Projectiles)
-                    player.mana -= 10
-            if event.key == K_n:
-                player.incMana(5)
+                player.fireball(PlayerProjectiles)
             if event.key == K_p:
                 player.useManaPotion()
 
@@ -86,9 +94,9 @@ while True:
 
     # Update Functions
     for enemy in levelManager.enemyGroup:
-        enemy.update(levelManager.levels[levelManager.getLevel()].groundData, player, Items)
+        enemy.update(levelManager.levels[levelManager.getLevel()].groundData,player,PlayerProjectiles,Items)
         
-    player.update(levelManager.levels[levelManager.getLevel()].groundData)
+    player.update(levelManager.levels[levelManager.getLevel()].groundData, EnemyProjectiles)
     UI.update(CLOCK.get_fps())
     
     levelManager.update()
@@ -104,11 +112,15 @@ while True:
     
     for item in Items:
         item.render(display)
-        item.update(player, UI.inventory.slots[0])
+        item.update(player)
 
-    for projectile in Projectiles:
+    for projectile in PlayerProjectiles:
         projectile.render(display)
         projectile.update(levelManager.enemyGroup)
+    
+    for projectile in EnemyProjectiles:
+        projectile.render(display)
+        projectile.update(playerGroup)
         
     player.render(display)
     UI.render(display)

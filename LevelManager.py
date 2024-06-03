@@ -52,11 +52,12 @@ class LevelManager:
         self.level += 1
 
     def changeLevel(self, n):
+        prevlevel = self.level
         self.level = n
         self.generatedEnemies = 0
         self.enemyGroup.empty()
-        pygame.time.set_timer(self.enemy_generation, 2000) 
-
+        pygame.time.set_timer(self.enemy_generation, 2000)
+        
     def update(self):
         if (self.generatedEnemies == self.levels[self.getLevel()].enemyCount):
             pygame.time.set_timer(self.enemy_generation, 0)

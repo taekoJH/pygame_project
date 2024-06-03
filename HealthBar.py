@@ -23,7 +23,7 @@ class HealthBar(pygame.sprite.Sprite):
         self.image = self.health_animations[self.health]
         
     def Heal(self, heal):
-        self.health += damage
+        self.health += heal
         if self.health > 5: self.health = 5
         
         self.image = self.health_animations[self.health]
