@@ -7,6 +7,7 @@ from Ground import Ground
 from Player import Player
 from Enemy import Enemy
 from UserInterface import UserInterface
+from LevelManager import LevelManager
 
 
 # Begin Pygame
@@ -24,27 +25,14 @@ pygame.display.set_caption("Pygame RPG")
 
 background = pygame.image.load("Images/Background.png")
 
-ground = Ground(900, 120, -20, 320, "Images/Ground.png")
 player = Player(200, 200)
 player.load_animations()
 UI = UserInterface()
 
-ground2 = Ground(100, 20, 300, 200, "Images/Ground.png")
-ground3 = Ground(120, 20, 100, 150, "Images/Ground.png")
-ground4 = Ground(80, 20, 500, 100, "Images/Ground.png")
-
-EnemyGroup = pygame.sprite.Group()
-
-
-GroundGroup = pygame.sprite.Group()
-GroundGroup.add(ground)
-GroundGroup.add(ground2)
-GroundGroup.add(ground3)
-GroundGroup.add(ground4)
-
 Items = pygame.sprite.Group()
 
-enemy_generation = pygame.USEREVENT + 2
+levelManager = LevelManager()
+
 
 while True:
 
@@ -57,6 +45,11 @@ while True:
             player.hit_cooldown = False
             pygame.time.set_timer(player.hit_cooldown_event, 0)
 
+        if event.type == levelManager.enemy_generation:
+            enemy = Enemy()
+            levelManager.enemyGroup.add(enemy)
+            levelManager.generatedEnemies += 1
+
         if event.type == MOUSEBUTTONDOWN:
             pass
 
@@ -66,10 +59,14 @@ while True:
             if event.key == K_RETURN:
                 player.attacking = True
                 player.attack()
-            if event.key == K_q:
-                pygame.time.set_timer(enemy_generation, 2000)
-            if event.key == K_w:
-                pygame.time.set_timer(enemy_generation, 0)
+            if event.key == K_1:
+                levelManager.changeLevel(0)
+            if event.key == K_2:
+                levelManager.changeLevel(1)
+            if event.key == K_3:
+                levelManager.changeLevel(2)
+            if event.key == K_4:
+                levelManager.changeLevel(3)
 
         if event.type == KEYUP:
             if event.key == K_SPACE:
@@ -77,28 +74,29 @@ while True:
 
 
     # Update Functions
-    for enemy in EnemyGroup:
-        enemy.update(GroundGroup, player)
+    for enemy in levelManager.enemyGroup:
+        enemy.update(levelManager.levels[levelManager.getLevel()].groundData, player, Items)
         
-    player.update(GroundGroup)
+    player.update(levelManager.levels[levelManager.getLevel()].groundData)
     UI.update(CLOCK.get_fps())
-
+    
+    levelManager.update()
 
     # Render Functions
     display.blit(background, (0, 0))
-    player.render(display)
-    UI.render(display)
 
+    for data in levelManager.levels[levelManager.getLevel()].data:
+        data.render(display)
+
+    for enemy in levelManager.enemyGroup:
+        enemy.render(display)
+    
     for item in Items:
         item.render(display)
         item.update(player)
-    
-    for grounds in GroundGroup:
-        grounds.render(display)
-
-    for enemy in EnemyGroup:
-        enemy.render(display)
-
+        
+    player.render(display)
+    UI.render(display)
 
     pygame.display.update()
     CLOCK.tick(FPS)
