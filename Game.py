@@ -30,6 +30,7 @@ player.load_animations()
 UI = UserInterface()
 
 Items = pygame.sprite.Group()
+Projectiles = pygame.sprite.Group()
 
 levelManager = LevelManager()
 
@@ -59,6 +60,8 @@ while True:
             if event.key == K_RETURN:
                 player.attacking = True
                 player.attack()
+            if event.key == K_h:
+                UI.toggleInventory()
             if event.key == K_1:
                 levelManager.changeLevel(0)
             if event.key == K_2:
@@ -67,8 +70,8 @@ while True:
                 levelManager.changeLevel(2)
             if event.key == K_4:
                 levelManager.changeLevel(3)
-            if event.key == K_h:
-                UI.toggleInventory()
+            if event.key == K_m:
+                player.fireball(Projectiles)
 
         if event.type == KEYUP:
             if event.key == K_SPACE:
@@ -95,7 +98,11 @@ while True:
     
     for item in Items:
         item.render(display)
-        item.update(player)
+        item.update(player, UI.inventory.slots[0])
+
+    for projectile in Projectiles:
+        projectile.render(display)
+        projectile.update(levelManager.enemyGroup)
         
     player.render(display)
     UI.render(display)

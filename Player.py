@@ -107,6 +107,10 @@ class Player(pygame.sprite.Sprite):
                 self.attack_frame += 1
                 self.attack_counter = 0
 
+    def fireball(self, group):
+        fireball = Fireball(self)
+        group.add(fireball)
+
     def update(self, group):
         self.walking()
         self.move()
