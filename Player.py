@@ -56,8 +56,8 @@ class Player(pygame.sprite.Sprite):
         self.pos += self.vel + 0.5 * self.acc
 
         if self.pos.x > 800:
-            self.pos.x = -40
-        elif self.pos.x < -40:
+            self.pos.x = 0
+        elif self.pos.x < -30:
             self.pos.x = 800
         
         self.rect.topleft = self.pos
@@ -103,7 +103,7 @@ class Player(pygame.sprite.Sprite):
                 self.image = self.attack_animation_left[self.attack_frame]
 
             self.attack_counter += 1
-            if self.attack_counter >= 2:
+            if self.attack_counter >= 3:
                 self.attack_frame += 1
                 self.attack_counter = 0
 
@@ -138,6 +138,11 @@ class Player(pygame.sprite.Sprite):
         if self.jumping == False:
             self.jumping = True
             self.vel.y = -12
+
+    def jump_cancel(self):
+        if self.jumping:
+            if self.vel.y < -3:
+                self.vel.y = -3
 
 
     def render(self, display):
