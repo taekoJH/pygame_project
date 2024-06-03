@@ -3,8 +3,8 @@ from pygame.locals import *
 import sys
 
 
-from Ground import *
-
+from Ground import Ground
+from Player import Player
 
 # Begin Pygame
 pygame.init()
@@ -37,9 +37,11 @@ while True:
         if event.type == KEYDOWN:
             pass
 
+    Player.move()
 
     display.blit(background, (0, 0))
     ground.render(display)
+    player.render(display)
 
     pygame.display.update()
     CLOCK.tick(FPS)
