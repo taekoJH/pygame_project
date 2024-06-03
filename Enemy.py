@@ -70,6 +70,10 @@ class Enemy(pygame.sprite.Sprite):
             elif random_chance >= 11 and random_chance <= 20:
                 item = Item(self.pos.x, self.pos.y, 1, "Images/heart1.png")
                 itemGroup.add(item)
+            elif random_chance >= 21 and random_chance <= 30:
+                item = Item(self.pos.x, self.pos.y, 2, "Images/mana_potion.png")
+                itemGroup.add(item)
+
 
     def update(self, group, player):
         self.move()

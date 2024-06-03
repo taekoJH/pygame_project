@@ -13,19 +13,21 @@ class UserInterface:
         self.regularfont = pygame.font.SysFont("Verdana", 20)
         self.largefont = pygame.font.SysFont("Verdana", 40)
 
+        self.playerRef = player
+
         self.text = self.regularfont.render("0", True, self.color_black)
-        self.inventory = Inventory()
+        self.inventory = Inventory(player)
         self.inventoryRender = True
 
 
     def update(self, fps):
         self.text = self.regularfont.render(str(fps), True, self.color_black)
-        
+        self.inventory.update()
         
     def render(self, display):
         display.blit(self.text, (700, 20))
 
-        if self.inventoryRender == True:
+        if self.showInventory:
             self.inventory.render(display)
 
 

@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from HealthBar import HealthBar
+from Fireball import Fireball
 
 vec = pygame.math.Vector2
 
@@ -31,7 +32,14 @@ class Player(pygame.sprite.Sprite):
         self.attack_counter = 0
         self.attack_range = pygame.Rect(0, 0, 0, 0)
         self.hit_cooldown = False
+        self.mana = 10
+        self.maxMana = 100
 
+        # Player Items
+        self.coins = 20
+        self.manaPotions = 3
+
+        # Player Events
         self.hit_cooldown_event = pygame.USEREVENT + 1
 
 
@@ -147,6 +155,16 @@ class Player(pygame.sprite.Sprite):
         if self.jumping:
             if self.vel.y < -3:
                 self.vel.y = -3
+
+    def incMana(self, n):
+        if self.mana + n <= self.maxMana:
+            self.mana += n
+        else:
+            self.mana = self.maxMana
+
+    def useManaPotion(self):
+        self.manaPotions -= 1
+        self.mana += 25
 
 
     def render(self, display):

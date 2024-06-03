@@ -19,9 +19,11 @@ class Item(pygame.sprite.Sprite):
 
         if hits:
             if self.ID == 0:
-                pass
+                player.coins += 1
             elif self.ID == 1:
                 player.healthBar.Heal(1)
+            elif self.ID == 2:
+                player.manaPotions += 1
 
             self.kill()
 

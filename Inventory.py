@@ -6,11 +6,15 @@ class Inventory:
         self.slots = []
 
         self.image = pygame.image.load("Images/Inventory.png")
-        self.rect = self.image.get_rect()
-        self.rect.topleft = (0, 350)
+        self.slots = []
+        self.playerRef = player
 
         self.slots.append(InventorySlot("Images/coinIcon.png", (20, 360)))
         self.slots.append(InventorySlot("Images/manapotionIcon.png", (120, 360)))
+
+    def update(self):
+        self.slots[0].count = self.playerRef.coins
+        self.slots[1].count = self.playerRef.manaPotions
 
         
     def render(self, display):

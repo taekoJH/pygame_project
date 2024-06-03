@@ -71,7 +71,13 @@ while True:
             if event.key == K_4:
                 levelManager.changeLevel(3)
             if event.key == K_m:
-                player.fireball(Projectiles)
+                if player.mana >= 10:
+                    player.fireball(Projectiles)
+                    player.mana -= 10
+            if event.key == K_n:
+                player.incMana(5)
+            if event.key == K_p:
+                player.useManaPotion()
 
         if event.type == KEYUP:
             if event.key == K_SPACE:
