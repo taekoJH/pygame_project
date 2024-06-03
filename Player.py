@@ -4,40 +4,6 @@ from pygame.locals import *
 vec = pygame.math.Vector2
 
 
-
-animation_right = [pygame.image.load("Images/Player_Sprite_R.png"),
-                   pygame.image.load("Images/Player_Sprite2_R.png"),
-                   pygame.image.load("Images/Player_Sprite3_R.png"),
-                   pygame.image.load("Images/Player_Sprite4_R.png"),
-                   pygame.image.load("Images/Player_Sprite5_R.png"),
-                   pygame.image.load("Images/Player_Sprite6_R.png"),
-                   pygame.image.load("Images/Player_Sprite_R.png")]
-
-animation_left = [pygame.image.load("Images/Player_Sprite_L.png"),
-                  pygame.image.load("Images/Player_Sprite2_L.png"),
-                  pygame.image.load("Images/Player_Sprite3_L.png"),
-                  pygame.image.load("Images/Player_Sprite4_L.png"),
-                  pygame.image.load("Images/Player_Sprite5_L.png"),
-                  pygame.image.load("Images/Player_Sprite6_L.png"),
-                  pygame.image.load("Images/Player_Sprite_L.png")]
-
-attack_animation_right = [pygame.image.load("Images/Player_Sprite_R.png"),
-                          pygame.image.load("Images/Player_Attack_R.png"),
-                          pygame.image.load("Images/Player_Attack2_R.png"),
-                          pygame.image.load("Images/Player_Attack3_R.png"),
-                          pygame.image.load("Images/Player_Attack4_R.png"),
-                          pygame.image.load("Images/Player_Attack5_R.png"),
-                          pygame.image.load("Images/Player_Sprite_R.png")]
-
-attack_animation_left = [pygame.image.load("Images/Player_Sprite_L.png"),
-                          pygame.image.load("Images/Player_Attack_L.png"),
-                          pygame.image.load("Images/Player_Attack2_L.png"),
-                          pygame.image.load("Images/Player_Attack3_L.png"),
-                          pygame.image.load("Images/Player_Attack4_L.png"),
-                          pygame.image.load("Images/Player_Attack5_L.png"),
-                          pygame.image.load("Images/Player_Sprite_L.png")]
-
-
 class Player(pygame.sprite.Sprite):
     def __init__(self, x, y):
         super().__init__()
@@ -83,6 +49,11 @@ class Player(pygame.sprite.Sprite):
         self.acc.x += self.vel.x * self.FRIC
         self.vel += self.acc
         self.pos += self.vel + 0.5 * self.acc
+
+        if self.pos.x > 800:
+            self.pos.x = 0
+        elif self.pos.x < -30:
+            self.pos.x = 800
         
         self.rect.topleft = self.pos
         self.rect.x += 32
@@ -132,6 +103,7 @@ class Player(pygame.sprite.Sprite):
                 self.attack_counter = 0
 
     def update(self, group):
+        self.attack()
         self.walking()
         self.move()
         self.collision(group)
@@ -161,3 +133,37 @@ class Player(pygame.sprite.Sprite):
         pygame.draw.rect(display, (255, 0, 0), self.rect)
         pygame.draw.rect(display, (0, 255, 0), self.attack_range)
         display.blit(self.image, self.pos)
+
+    def load_animations(self):
+        self.animation_right = [pygame.image.load("Images/Player_Sprite_R.png").convert_alpha(),
+                   pygame.image.load("Images/Player_Sprite2_R.png").convert_alpha(),
+                   pygame.image.load("Images/Player_Sprite3_R.png").convert_alpha(),
+                   pygame.image.load("Images/Player_Sprite4_R.png").convert_alpha(),
+                   pygame.image.load("Images/Player_Sprite5_R.png").convert_alpha(),
+                   pygame.image.load("Images/Player_Sprite6_R.png").convert_alpha(),
+                   pygame.image.load("Images/Player_Sprite_R.png").convert_alpha()]
+
+        self.animation_left = [pygame.image.load("Images/Player_Sprite_L.png").convert_alpha(),
+                          pygame.image.load("Images/Player_Sprite2_L.png").convert_alpha(),
+                          pygame.image.load("Images/Player_Sprite3_L.png").convert_alpha(),
+                          pygame.image.load("Images/Player_Sprite4_L.png").convert_alpha(),
+                          pygame.image.load("Images/Player_Sprite5_L.png").convert_alpha(),
+                          pygame.image.load("Images/Player_Sprite6_L.png").convert_alpha(),
+                          pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
+
+        self.attack_animation_right = [pygame.image.load("Images/Player_Sprite_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack2_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack3_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack4_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack5_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_R.png").convert_alpha()]
+
+        self.attack_animation_left = [pygame.image.load("Images/Player_Sprite_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack2_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack3_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack4_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack5_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
+

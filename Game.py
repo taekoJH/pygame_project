@@ -5,6 +5,9 @@ import sys
 
 from Ground import Ground
 from Player import Player
+from Enemy import Enemy
+from UserInterface import UserInterface
+
 
 # Begin Pygame
 pygame.init()
@@ -23,9 +26,20 @@ background = pygame.image.load("Images/Background.png")
 
 ground = Ground(900, 120, -20, 320, "Images/Ground.png")
 player = Player(200, 200)
+player.load_animations()
+E1 = Enemy()
+UI = UserInterface()
 
+ground2 = Ground(100, 20, 300, 200, "Images/Ground.png")
+ground3 = Ground(120, 20, 100, 150, "Images/Ground.png")
+ground4 = Ground(80, 20, 500, 100, "Images/Ground.png")
+
+EnemyGroup = pygame.sprite.Group()
 GroundGroup = pygame.sprite.Group()
 GroundGroup.add(ground)
+GroundGroup.add(ground2)
+GroundGroup.add(ground3)
+GroundGroup.add(ground4)
 
 while True:
 
@@ -44,11 +58,22 @@ while True:
                 player.attacking = True
                 player.attack()
 
+
+    E1.move()
+    E1.collision(GroundGroup)
+    E1.player_collision(player)
     player.update(GroundGroup)
+    UI.update(CLOCK.get_fps())
+
 
     display.blit(background, (0, 0))
-    ground.render(display)
     player.render(display)
+    E1.render(display)
+    UI.render(display)
+
+    for grounds in GroundGroup:
+        grounds.render(display)
+
 
     pygame.display.update()
     CLOCK.tick(FPS)
