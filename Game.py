@@ -40,6 +40,9 @@ while True:
         if event.type == KEYDOWN:
             if event.key == K_SPACE:
                 player.jump()
+            if event.key == K_RETURN:
+                player.attacking = True
+                player.attack()
 
     player.update(GroundGroup)
 
