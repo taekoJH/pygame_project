@@ -15,7 +15,7 @@ class Player(pygame.sprite.Sprite):
         self.pos = vec(x, y)
         self.acc = vec(0, 0)
         self.vel = vec(0, 0)
-        self.healthbar = HealthBar(10, 10)
+        self.healthBar = HealthBar(10, 10)
         self.mana = 50
         self.maxMana = 100
         self.coins = 20
@@ -135,7 +135,7 @@ class Player(pygame.sprite.Sprite):
     def player_hit(self, damage):
         if self.hit_cooldown == False:
             self.hit_cooldown = True
-            self.healthbar.takeDamage(damage)
+            self.healthBar.takeDamage(damage)
             pygame.time.set_timer(self.hit_cooldown_event, 1000)
 
 
@@ -185,7 +185,7 @@ class Player(pygame.sprite.Sprite):
         #pygame.draw.rect(display, (255, 0, 0), self.rect)
         #pygame.draw.rect(display, (0, 255, 0), self.attack_range)
         display.blit(self.image, self.pos)
-        self.healthbar.render(display)
+        self.healthBar.render(display)
         pygame.draw.rect(display, (0,0,255), pygame.Rect(self.pos.x, self.rect.y - 50,
                                                          100 * (self.mana/self.maxMana), 15))
 
