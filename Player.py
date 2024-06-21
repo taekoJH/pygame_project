@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from HealthBar import HealthBar
 from Fireball import Fireball
+import ipdb
 
 vec = pygame.math.Vector2
 
@@ -289,6 +290,8 @@ class Player(pygame.sprite.Sprite):
             self.dashing = False
         
         if self.dashing == True:
+            
+            # ipdb.set_trace()
             if self.direction == "RIGHT":
                 self.attack_range = pygame.Rect(self.rect.x + self.rect.width,self.pos.y, 30, self.rect.height)
             elif self.direction == "LEFT":

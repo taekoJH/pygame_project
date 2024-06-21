@@ -86,7 +86,27 @@ while True:
                 player.fireball(PlayerProjectiles)
             if event.key == K_p:
                 player.useManaPotion()
+            #############################################################
+            ####################### PHASE 2 #############################
+            #############################################################
+            # Ult skill - R
+            if event.key == K_r:
+                # ipdb.set_trace()
+                player.dashing = True
+                player.dash()
 
+            # #  skill - E
+            # if event.key == K_r:
+            #     # ipdb.set_trace()
+            #     player.dashing = True
+            #     player.dash()
+
+
+            #############################################################
+            ####################### PHASE 2 #############################
+            #############################################################
+
+                
         if event.type == KEYUP:
             if event.key == K_SPACE:
                 player.jump_cancel()
