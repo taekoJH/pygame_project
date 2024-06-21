@@ -2,6 +2,7 @@ import pygame
 from pygame.locals import *
 from HealthBar import HealthBar
 from Fireball import Fireball
+import ipdb
 
 vec = pygame.math.Vector2
 
@@ -12,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         self.image = pygame.image.load("Images/Player_Sprite_R.png")
         self.rect = pygame.Rect(x, y, 35, 50)
 
-        self.pos = vec(x, y)
+        self.pos = vec(x, y) #try
         self.acc = vec(0, 0)
         self.vel = vec(0, 0)
         self.healthBar = HealthBar(10, 10)
@@ -34,6 +35,24 @@ class Player(pygame.sprite.Sprite):
         self.attacking = False
         self.attack_frame = 0
         self.attack_counter = 0
+
+        #############################################################
+        ####################### PHASE 2 #############################
+        #############################################################
+        # Dash parameter
+        self.dashing = False
+        self.dash_frame = 0
+        self.dash_counter = 0
+
+        # Defend parameter
+        self.defending = False
+        self.defend_frame = 0
+        self.defend_counter = 0
+
+        #############################################################
+        ####################### PHASE 2 #############################
+        #############################################################
+
         self.attack_range = pygame.Rect(0, 0, 0, 0)
         self.hit_cooldown = False
 
@@ -57,6 +76,18 @@ class Player(pygame.sprite.Sprite):
             self.acc.x = -self.ACC
         if keys[K_RIGHT]:
             self.acc.x = self.ACC
+
+        #############################################################
+        ####################### PHASE 2 #############################
+        #############################################################
+        if self.dashing:
+            if self.direction == "RIGHT":
+                self.vel.x = 10     # dash
+            elif self.direction == "LEFT":
+                self.vel.x = -10    # dash
+        #############################################################
+        ####################### PHASE 2 #############################
+        #############################################################
 
         self.acc.x += self.vel.x * self.FRIC
         self.vel += self.acc
@@ -124,6 +155,17 @@ class Player(pygame.sprite.Sprite):
         self.walking()
         self.move()
         self.attack()
+        #############################################################
+        ####################### PHASE 2 #############################
+        #############################################################
+        # Always update dash
+        
+        self.dash()
+        self.defend()
+
+        #############################################################
+        ####################### PHASE 2 #############################
+        #############################################################
         self.collision(group)
         self.checkProjectiles(enemyProjectiles)
 
@@ -221,4 +263,118 @@ class Player(pygame.sprite.Sprite):
                                   pygame.image.load("Images/Player_Attack4_L.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack5_L.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
+        #############################################################
+        ####################### PHASE 2 #############################
+        #############################################################
+        self.dash_animation_right = [pygame.image.load("Images/Player_Sprite_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack1_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack2_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack3_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack4_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack5_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack1_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack2_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack3_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack4_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack5_R.png").convert_alpha(),]
+        
+        self.dash_animation_left = [pygame.image.load("Images/Player_Sprite_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack1_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack2_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack3_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack4_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack5_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack1_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack2_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack3_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack4_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Attack5_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
+        
+        self.defend_animation_left = [pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
+        
+        self.defend_animation_right = [pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_R.png").convert_alpha()]
 
+
+    def dash(self):
+        if self.mana < 20:
+            self.dashing = False
+        
+        if self.dashing == True:
+            
+            # ipdb.set_trace()
+            if self.direction == "RIGHT":
+                self.attack_range = pygame.Rect(self.rect.x + self.rect.width,self.pos.y, 30, self.rect.height)
+            elif self.direction == "LEFT":
+                self.attack_range = pygame.Rect(self.pos.x, self.pos.y, 30, self.rect.height)
+
+            if self.dash_frame > 10:
+                # print(self.attach_frame)
+                self.dash_frame = 0
+                self.dashing = False
+                self.attack_range = pygame.Rect(0, 0, 0, 0)
+                self.mana -= 20 #mana decrease
+                return
+            
+            if self.direction == "RIGHT":
+                self.image = self.dash_animation_right[self.dash_frame]
+            elif self.direction == "LEFT":
+                self.image = self.dash_animation_left[self.dash_frame]
+
+            self.dash_counter += 1
+            if self.dash_counter >= 2:
+                self.dash_frame += 1
+                self.dash_counter = 0
+    
+
+    def defend(self):
+        if self.mana < 10:
+            self.defending = False
+            
+        if self.defending == True:
+            self.hit_cooldown = True    # Invincibility
+            if self.defend_frame > 10:
+                self.defend_frame = 0
+                self.defending = False
+                self.mana -= 10 #mana decrease
+                self.hit_cooldown = False       # Disable Invincibility 
+                return
+            
+            if self.direction == "RIGHT":
+                try:
+                    self.image = self.defend_animation_right[self.defend_frame]
+                except:
+                    ipdb.set_trace()
+            elif self.direction == "LEFT":
+                self.image = self.defend_animation_left[self.defend_frame]
+
+            self.defend_counter += 1
+            if self.defend_counter >= 2:
+                self.defend_frame += 1
+                self.defend_counter = 0
+    
+
+#############################################################
+####################### PHASE 2 #############################
+#############################################################
