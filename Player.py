@@ -44,6 +44,11 @@ class Player(pygame.sprite.Sprite):
         self.dash_frame = 0
         self.dash_counter = 0
 
+        # Defend parameter
+        self.defending = False
+        self.defend_frame = 0
+        self.defend_counter = 0
+
         #############################################################
         ####################### PHASE 2 #############################
         #############################################################
@@ -156,6 +161,7 @@ class Player(pygame.sprite.Sprite):
         # Always update dash
         
         self.dash()
+        self.defend()
 
         #############################################################
         ####################### PHASE 2 #############################
@@ -285,6 +291,32 @@ class Player(pygame.sprite.Sprite):
                                   pygame.image.load("Images/Player_Attack4_L.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Attack5_L.png").convert_alpha(),
                                   pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
+        
+        self.defend_animation_left = [pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_L.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_L.png").convert_alpha()]
+        
+        self.defend_animation_right = [pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Defend_R.png").convert_alpha(),
+                                  pygame.image.load("Images/Player_Sprite_R.png").convert_alpha()]
+
+
     def dash(self):
         if self.mana < 20:
             self.dashing = False
@@ -314,6 +346,34 @@ class Player(pygame.sprite.Sprite):
             if self.dash_counter >= 2:
                 self.dash_frame += 1
                 self.dash_counter = 0
+    
+
+    def defend(self):
+        if self.mana < 10:
+            self.defending = False
+            
+        if self.defending == True:
+            self.hit_cooldown = True    # Invincibility
+            if self.defend_frame > 10:
+                self.defend_frame = 0
+                self.defending = False
+                self.mana -= 10 #mana decrease
+                self.hit_cooldown = False       # Disable Invincibility 
+                return
+            
+            if self.direction == "RIGHT":
+                try:
+                    self.image = self.defend_animation_right[self.defend_frame]
+                except:
+                    ipdb.set_trace()
+            elif self.direction == "LEFT":
+                self.image = self.defend_animation_left[self.defend_frame]
+
+            self.defend_counter += 1
+            if self.defend_counter >= 2:
+                self.defend_frame += 1
+                self.defend_counter = 0
+    
 
 #############################################################
 ####################### PHASE 2 #############################

@@ -41,6 +41,11 @@ levelManager = LevelManager()
 
 
 while True:
+    if player.healthBar.health == 0:
+        pygame.quit()
+        sys.exit()
+
+    print(f"player.healthBar.health = {player.healthBar.health}")
 
     for event in pygame.event.get():
         if event.type == QUIT:
@@ -91,15 +96,13 @@ while True:
             #############################################################
             # Ult skill - R
             if event.key == K_r:
-                # ipdb.set_trace()
                 player.dashing = True
                 player.dash()
 
-            # #  skill - E
-            # if event.key == K_r:
-            #     # ipdb.set_trace()
-            #     player.dashing = True
-            #     player.dash()
+            #  skill - E
+            if event.key == K_e:
+                player.defending = True
+                player.defend()
 
 
             #############################################################
